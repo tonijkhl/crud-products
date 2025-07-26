@@ -167,8 +167,8 @@ CREATE OR REPLACE FUNCTION update_product(
     p_product_name VARCHAR,
     p_product_price DECIMAL(10,2),
     p_product_description TEXT,
-    p_category_id UUID,
-    p_user_id UUID
+    p_category_id UUID DEFAULT NULL,
+    p_user_id UUID DEFAULT NULL
 )
 RETURNS VOID AS $$
 BEGIN
@@ -177,15 +177,19 @@ BEGIN
         RAISE EXCEPTION 'Product with ID "%" not found.', p_product_id;
     END IF;
 
-    -- Check category exists
-    IF NOT EXISTS (SELECT 1 FROM products_categories WHERE category_id = p_category_id) THEN
-        RAISE EXCEPTION 'Category ID "%" does not exist.', p_category_id;
-    END IF;
+    -- Check category if exist exists
+	IF p_category_id IS NOT NULL THEN
+    	IF NOT EXISTS (SELECT 1 FROM products_categories WHERE category_id = p_category_id) THEN
+      	  RAISE EXCEPTION 'Category ID "%" does not exist.', p_category_id;
+    	END IF;
+	END IF;
 
-    -- Check user exists
-    IF NOT EXISTS (SELECT 1 FROM users WHERE user_id = p_user_id) THEN
-        RAISE EXCEPTION 'User ID "%" does not exist.', p_user_id;
-    END IF;
+    -- Check user if exist exists
+	IF p_user_id IS NOT NULL THEN
+    	IF NOT EXISTS (SELECT 1 FROM users WHERE user_id = p_user_id) THEN
+        	RAISE EXCEPTION 'User ID "%" does not exist.', p_user_id;
+    	END IF;
+	END IF;
 
     -- Perform update
     UPDATE products
@@ -215,3 +219,8 @@ BEGIN
     DELETE FROM products WHERE product_id = p_product_id;
 END;
 $$ LANGUAGE plpgsql;
+
+------------------------------------ read products categories ------------------------------------
+CREATE VIEW "category_view" AS
+SELECT category_id, category_name, category_description
+FROM "products_categories";

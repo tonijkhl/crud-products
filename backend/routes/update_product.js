@@ -17,9 +17,7 @@ router.put('/update-product', async (req, res) => {
   if (
     !productId ||
     !product_name || 
-    !product_price || 
-    !category_id || 
-    !user_id
+    !product_price
   ) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
