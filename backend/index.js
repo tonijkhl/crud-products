@@ -1,18 +1,28 @@
-import { initializeDatabase } from './db.js';
-
 const express = require('express');
-const cors = require('cors');
+const createUserRoute = require('./routes/create_user');
+const createProductCategoryRoute = require('./routes/create_product_category');
+
+const createProductRoute = require('./routes/create_product');
+const readProductsRoute = require('./routes/read_products');
+const updateProductRoute = require('./routes/update_product');
+const deleteProductsRoute = require('./routes/delete_product')
+
+require('dotenv').config();
 
 const app = express();
-app.use(cors());
+const PORT = 3000;
+
+// Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Example route
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from backend!' });
-});
+app.use('/api', createUserRoute);
+app.use('/api', createProductCategoryRoute);
 
-const PORT = 3000;
+app.use('/api', createProductRoute);
+app.use('/api', readProductsRoute);
+app.use('/api', updateProductRoute);
+app.use('/api', deleteProductsRoute);
+
 app.listen(PORT, () => {
-  console.log(`API server running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

@@ -1,14 +1,15 @@
+require('dotenv').config();
 
+const { Pool } = require('pg');
+require('dotenv').config();
 
-export function initializeDatabase() {
-  // Initialize the database connection
-  const db = database;
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT, 10),
+  ssl: false // Set to true only if needed
+});
 
-  // Check if the database is connected
-  if (!db) {
-    throw new Error('Database connection failed');
-  }
-
-  // Perform any necessary setup or migrations here
-  console.log('Database initialized successfully');
-}
+module.exports = { pool };
