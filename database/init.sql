@@ -177,28 +177,28 @@ BEGIN
         RAISE EXCEPTION 'Product with ID "%" not found.', p_product_id;
     END IF;
 
-    -- Check category if exist exists
-	IF p_category_id IS NOT NULL THEN
-    	IF NOT EXISTS (SELECT 1 FROM products_categories WHERE category_id = p_category_id) THEN
-      	  RAISE EXCEPTION 'Category ID "%" does not exist.', p_category_id;
-    	END IF;
-	END IF;
+    -- Check category if provided
+    IF p_category_id IS NOT NULL THEN
+        IF NOT EXISTS (SELECT 1 FROM products_categories WHERE category_id = p_category_id) THEN
+            RAISE EXCEPTION 'Category ID "%" does not exist.', p_category_id;
+        END IF;
+    END IF;
 
-    -- Check user if exist exists
-	IF p_user_id IS NOT NULL THEN
-    	IF NOT EXISTS (SELECT 1 FROM users WHERE user_id = p_user_id) THEN
-        	RAISE EXCEPTION 'User ID "%" does not exist.', p_user_id;
-    	END IF;
-	END IF;
+    -- Check user if provided
+    IF p_user_id IS NOT NULL THEN
+        IF NOT EXISTS (SELECT 1 FROM users WHERE user_id = p_user_id) THEN
+            RAISE EXCEPTION 'User ID "%" does not exist.', p_user_id;
+        END IF;
+    END IF;
 
-    -- Perform update
+    -- Perform update with COALESCE for optional fields
     UPDATE products
     SET
         product_name = p_product_name,
         product_price = p_product_price,
         product_description = p_product_description,
-        category_id = p_category_id,
-        user_id = p_user_id
+        category_id = COALESCE(p_category_id, category_id),
+        user_id = COALESCE(p_user_id, user_id)
     WHERE
         product_id = p_product_id;
 END;
