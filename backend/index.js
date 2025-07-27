@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const createUserRoute = require('./routes/create_user');
+const loginRoute = require('./routes/login');
 const createProductCategoryRoute = require('./routes/create_product_category');
 const readProductsCategoryRoute = require('./routes/read_products_category')
 
@@ -24,6 +25,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api', createUserRoute);
+app.use('/api', loginRoute);
 app.use('/api', createProductCategoryRoute);
 app.use('/api', readProductsCategoryRoute);
 

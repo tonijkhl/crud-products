@@ -11,7 +11,7 @@ function Header() {
     <AppBar position="static">
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6" component="div">
-          My Website
+          Products Website
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -21,7 +21,7 @@ function Header() {
           <Button component={RouterLink} to="/products" color="inherit">
             Products
           </Button>
-          <Button color="inherit">
+          <Button component={RouterLink} to="/new-product" color="inherit">
             New Product
           </Button>
           <Button component={RouterLink} to="/categories" color="inherit">

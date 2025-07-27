@@ -1,10 +1,20 @@
 import { useState } from 'react';
 import { createProductCategory } from '../services/api';
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+} from '@mui/material';
+import SnackbarAlert from './SnackbarAlert';
 
 function NewCategoryForm() {
   const [categoryName, setCategoryName] = useState('');
   const [categoryDescription, setCategoryDescription] = useState('');
-  const [message, setMessage] = useState('');
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,43 +22,71 @@ function NewCategoryForm() {
     try {
       await createProductCategory({
         categoryName,
-        categoryDescription
+        categoryDescription,
       });
-      setMessage('Category created successfully!');
+
       setCategoryName('');
       setCategoryDescription('');
+      setSnackbarMessage('Category created successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error creating category:', error);
-      setMessage('Failed to create category.');
+      setSnackbarMessage('Failed to create category.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: '1rem', background: 'white', maxWidth: '400px' }}>
-      <h2>Create New Category</h2>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        backgroundColor: 'white',
+        maxWidth: 500,
+        mx: 'auto',
+        mt: 4,
+        p: 3,
+        borderRadius: 2,
+        boxShadow: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+      }}
+    >
+      <Typography variant="h5" align="center">
+        Create New Category
+      </Typography>
 
-      <div style={{ marginBottom: '0.5rem' }}>
-        <label>Category Name:</label><br />
-        <input
-          type="text"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
-          required
-        />
-      </div>
+      <TextField
+        label="Category Name"
+        value={categoryName}
+        onChange={(e) => setCategoryName(e.target.value)}
+        required
+        fullWidth
+      />
 
-      <div style={{ marginBottom: '0.5rem' }}>
-        <label>Category Description:</label><br />
-        <textarea
-          value={categoryDescription}
-          onChange={(e) => setCategoryDescription(e.target.value)}
-        />
-      </div>
+      <TextField
+        label="Category Description"
+        value={categoryDescription}
+        onChange={(e) => setCategoryDescription(e.target.value)}
+        multiline
+        rows={3}
+        fullWidth
+      />
 
-      <button type="submit">Create Category</button>
+      <Button variant="contained" type="submit" color="primary">
+        Create Category
+      </Button>
 
-      {message && <p>{message}</p>}
-    </form>
+      <SnackbarAlert
+        open={snackbarOpen}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
+    </Box>
   );
 }
 

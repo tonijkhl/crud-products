@@ -8,5 +8,8 @@ export const getProducts = () => API.get('/read-products');
 export const createProduct = (data) => API.post('/create-product', data);
 export const updateProduct = (id, data) => API.put(`/update-product?id=${id}`, data);
 export const deleteProduct = (id) => API.delete(`/delete-product?id=${id}`);
+
 export const getProductCategories = () => API.get('/read-products-category');
 export const createProductCategory = (data) => API.post('/create-category', data);
+
+export const logIn = (data) => API.post('/log-in', data);
