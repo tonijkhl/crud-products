@@ -27,7 +27,7 @@ Below is the entity-relationship diagram representing how product information an
 
 📊 **Entity-Relationship Diagram:**
 
-[ERD](public/entity_diagram.png)
+![ERD](public/entity_diagram.png)
 
 ---
 
